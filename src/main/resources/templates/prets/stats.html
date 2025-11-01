@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Statistiques des Prêts</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<!-- Données Thymeleaf pour JavaScript -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const statsByNiveau = /*[[${statsByNiveau}]]*/ {};
+  const statsLateByMonth = /*[[${statsLateByMonth}]]*/ {};
+  /*]]>*/
+</script>
+
+<div th:replace="fragments/layout :: navbar"></div>
+
+<header class="text-center py-6 md:py-10 px-4">
+  <div class="flex items-center justify-center gap-3 mb-3">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+    <h1 class="text-3xl md:text-4xl font-bold text-primary">Statistiques des Prêts</h1>
+  </div>
+  <p class="text-gray-500 mt-2 text-sm md:text-base">Analyse détaillée des prêts de la bibliothèque</p>
+</header>
+
+<main class="container mx-auto px-4 md:px-6 pb-16">
+  
+  <!-- Statistiques générales -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+    <!-- Élèves -->
+    <div class="card bg-gradient-to-br from-green-400 to-green-600 text-white shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          Élèves inscrits
+        </h2>
+        <p class="text-3xl md:text-4xl font-bold" th:text="${totalEleves}">0</p>
+      </div>
+    </div>
+
+    <!-- Ouvrages -->
+    <div class="card bg-gradient-to-br from-blue-400 to-blue-600 text-white shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title flex items-center gap-2">
+          <svgw xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svgw>
+          Ouvrages
+        </h2>
+        <p class="text-3xl md:text-4xl font-bold" th:text="${totalOuvrages}">0</p>
+        <p class="text-sm opacity-90" th:text="'Disponibles: ' + ${totalOuvragesDisponibles}">Disponibles</p>
+      </div>
+    </div>
+
+    <!-- Prêts actifs -->
+    <div class="card bg-gradient-to-br from-purple-400 to-purple-600 text-white shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Prêts actifs
+        </h2>
+        <p class="text-3xl md:text-4xl font-bold" th:text="${totalActive}">0</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prêts en retard -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+    <div class="card bg-gradient-to-br from-red-400 to-red-600 text-white shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Prêts en retard
+        </h2>
+        <p class="text-3xl md:text-4xl font-bold" th:text="${totalLate}">0</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prêts par niveau - Graphique + Tableau -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Graphique -->
+    <div class="card bg-base-100 shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-lg md:text-xl">Prêts par niveau (Graphique)</h2>
+        <canvas id="niveauChart" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="card bg-base-100 shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-lg md:text-xl">Prêts par niveau (Tableau)</h2>
+        <div class="overflow-x-auto">
+          <table class="table w-full text-sm md:text-base">
+            <thead>
+              <tr>
+                <th>Niveau</th>
+                <th class="text-center">Nombre de prêts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="entry : ${statsByNiveau}">
+                <td class="font-semibold" th:text="${entry.key}">Niveau</td>
+                <td class="text-center">
+                  <span class="badge badge-primary badge-lg" th:text="${entry.value}">0</span>
+                </td>
+              </tr>
+              <tr th:if="${statsByNiveau.isEmpty()}">
+                <td colspan="2" class="text-center text-gray-500">Aucun prêt enregistré</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Retards par mois - Graphique + Tableau -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Graphique -->
+    <div class="card bg-base-100 shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-lg md:text-xl">Retards par mois (Graphique)</h2>
+        <canvas id="retardChart" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="card bg-base-100 shadow-lg">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-lg md:text-xl">Retards par mois (Tableau)</h2>
+        <div class="overflow-x-auto">
+          <table class="table w-full text-sm md:text-base">
+            <thead>
+              <tr>
+                <th>Mois</th>
+                <th class="text-center">Nombre de retards</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="entry : ${statsLateByMonth}">
+                <td class="font-semibold" th:text="${entry.key}">Mois</td>
+                <td class="text-center">
+                  <span class="badge badge-error badge-lg" th:text="${entry.value}">0</span>
+                </td>
+              </tr>
+              <tr th:if="${statsLateByMonth.isEmpty()}">
+                <td colspan="2" class="text-center text-gray-500">Aucun retard enregistré</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutons d'action -->
+  <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
+    <a href="/prets" class="btn btn-primary w-full sm:w-auto">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Retour aux prêts
+    </a>
+    <a href="/ouvrages/admin" class="btn btn-outline w-full sm:w-auto">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      Ouvrages
+    </a>
+  </div>
+
+</main>
+
+<div th:replace="fragments/layout :: footer"></div>
+
+<script>
+  // Graphique Prêts par niveau
+  const niveauCtx = document.getElementById('niveauChart');
+  if (niveauCtx) {
+    const labelsNiveau = Object.keys(statsByNiveau);
+    const dataNiveau = Object.values(statsByNiveau);
+    
+    new Chart(niveauCtx, {
+      type: 'bar',
+      data: {
+        labels: labelsNiveau,
+        datasets: [{
+          label: 'Nombre de prêts',
+          data: dataNiveau,
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(34, 197, 94, 0.7)',
+            'rgba(251, 146, 60, 0.7)'
+          ],
+          borderColor: [
+            'rgb(59, 130, 246)',
+            'rgb(34, 197, 94)',
+            'rgb(251, 146, 60)'
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  // Graphique Retards par mois
+  const retardCtx = document.getElementById('retardChart');
+  if (retardCtx) {
+    const labelsRetard = Object.keys(statsLateByMonth);
+    const dataRetard = Object.values(statsLateByMonth);
+    
+    new Chart(retardCtx, {
+      type: 'line',
+      data: {
+        labels: labelsRetard,
+        datasets: [{
+          label: 'Nombre de retards',
+          data: dataRetard,
+          borderColor: 'rgb(239, 68, 68)',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
+

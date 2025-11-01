@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${ouvrage.id != null} ? 'Modifier Ouvrage' : 'Ajouter Ouvrage'">Ajouter Ouvrage</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<!-- Navbar -->
+<div th:replace="fragments/layout :: navbar"></div>
+
+<!-- Alertes Flash -->
+<div th:replace="fragments/alerts :: flashMessages"></div>
+
+<div class="container mx-auto py-8 md:py-12 px-4">
+  <!-- Breadcrumb -->
+  <div class="text-sm breadcrumbs mb-6">
+    <ul>
+      <li><a href="/ouvrages/admin">Ouvrages</a></li>
+      <li th:text="${ouvrage.id != null} ? 'Modifier' : 'Ajouter'"></li>
+    </ul>
+  </div>
+
+  <div class="flex items-center justify-center gap-3 mb-6">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+    </svg>
+    <h1 class="text-2xl md:text-3xl font-bold text-primary" th:text="${ouvrage.id != null} ? 'Modifier Ouvrage' : 'Ajouter un Ouvrage'">Ajouter un Ouvrage</h1>
+  </div>
+
+  <form th:action="@{/ouvrages/save}" th:object="${ouvrage}" method="post" enctype="multipart/form-data" class="bg-base-100 p-4 md:p-6 rounded-lg shadow-md max-w-lg mx-auto">
+    <!-- Hidden ID for edit -->
+    <input type="hidden" th:field="*{id}" />
+    
+    <!-- Titre -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">Titre :</label>
+      <input type="text" th:field="*{titre}" placeholder="Titre de l'ouvrage" required
+             th:class="${#fields.hasErrors('titre')} ? 'input input-bordered w-full input-error' : 'input input-bordered w-full'" />
+      <div th:if="${#fields.hasErrors('titre')}" class="text-error text-sm mt-1">
+        <span th:each="error : ${#fields.errors('titre')}" th:text="${error}">Erreur</span>
+      </div>
+    </div>
+
+    <!-- Code Barres -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">Code Barres :</label>
+      <input type="text" th:field="*{codeBarres}" placeholder="Code barres de l'ouvrage"
+             th:class="${#fields.hasErrors('codeBarres')} ? 'input input-bordered w-full input-error' : 'input input-bordered w-full'" />
+      <div th:if="${#fields.hasErrors('codeBarres')}" class="text-error text-sm mt-1">
+        <span th:each="error : ${#fields.errors('codeBarres')}" th:text="${error}">Erreur</span>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">Le code barres sera généré automatiquement si laissé vide</p>
+    </div>
+
+    <!-- Niveau -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">Niveau :</label>
+      <select th:field="*{niveau}" required
+              th:class="${#fields.hasErrors('niveau')} ? 'select select-bordered w-full select-error' : 'select select-bordered w-full'">
+        <option value="">Sélectionner un niveau</option>
+        <option value="Primaire">Primaire</option>
+        <option value="Collège">Collège</option>
+        <option value="Lycée">Lycée</option>
+      </select>
+      <div th:if="${#fields.hasErrors('niveau')}" class="text-error text-sm mt-1">
+        <span th:each="error : ${#fields.errors('niveau')}" th:text="${error}">Erreur</span>
+      </div>
+    </div>
+
+    <!-- Quantité -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">Quantité :</label>
+      <input type="number" th:field="*{quantite}" min="0" placeholder="Nombre d'exemplaires" required
+             class="input input-bordered w-full" />
+      <p class="text-xs text-gray-500 mt-1">Nombre d'exemplaires disponibles</p>
+    </div>
+
+    <!-- Affichage du statut pour les ouvrages existants -->
+    <div class="mb-4" th:if="${ouvrage.id != null}">
+      <div class="alert alert-info">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 class="font-bold">Note importante</h3>
+          <div class="text-sm">La disponibilité est automatiquement mise à jour selon la quantité. 
+            Modifiez la quantité pour changer le statut.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Disponible - Seulement pour les nouveaux ouvrages -->
+    <div class="mb-4" th:if="${ouvrage.id == null}">
+      <div class="flex items-center gap-2">
+        <input type="checkbox" th:field="*{disponible}" id="disponible" class="checkbox checkbox-primary" />
+        <label for="disponible" class="text-gray-700 font-medium">Disponible</label>
+      </div>
+    </div>
+
+    <!-- Image -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2">Image :</label>
+      <input type="file" name="image" class="file-input file-input-bordered w-full" />
+    </div>
+
+    <!-- Boutons -->
+    <div class="flex flex-col sm:flex-row gap-3">
+      <a href="/ouvrages/admin" class="btn btn-outline w-full sm:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Annuler
+      </a>
+      <button type="submit" class="btn btn-primary w-full sm:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span th:text="${ouvrage.id != null} ? 'Modifier' : 'Ajouter'">Ajouter</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/layout :: footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - MonBiblio</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<!-- Navbar -->
+<div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl md:text-2xl font-bold text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span class="hidden sm:inline">MonBiblio</span>
+        </a>
+    </div>
+    <div class="flex-none">
+        <a href="/" class="btn btn-ghost btn-sm">Retour à l'accueil</a>
+    </div>
+</div>
+
+<!-- Alertes Flash -->
+<div th:replace="fragments/alerts :: flashMessages"></div>
+
+<div class="container mx-auto py-8 md:py-12 px-4">
+    <!-- Breadcrumb -->
+    <div class="text-sm breadcrumbs mb-6">
+        <ul>
+            <li><a href="/">Accueil</a></li>
+            <li>Administration</li>
+        </ul>
+    </div>
+
+    <div class="flex items-center justify-center gap-3 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <h1 class="text-2xl md:text-3xl font-bold text-primary">Administration</h1>
+    </div>
+
+    <!-- Information importante -->
+    <div class="alert alert-warning mb-8 max-w-2xl mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
+        <div>
+            <h3 class="font-bold">Accès administrateur</h3>
+            <div class="text-sm">Cette section est réservée aux administrateurs de la bibliothèque scolaire.</div>
+        </div>
+    </div>
+
+    <!-- Options d'administration -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-6xl mx-auto">
+        <!-- Gestion des élèves -->
+        <a href="/eleves" class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div class="card-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <h3 class="card-title justify-center text-lg md:text-xl">Gestion des élèves</h3>
+                <p class="text-sm md:text-base">Ajouter, modifier et gérer les élèves</p>
+            </div>
+        </a>
+
+        <!-- Gestion des ouvrages -->
+        <a href="/ouvrages/admin" class="card bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div class="card-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <h3 class="card-title justify-center text-lg md:text-xl">Gestion des ouvrages</h3>
+                <p class="text-sm md:text-base">Ajouter, modifier et gérer les ouvrages</p>
+            </div>
+        </a>
+
+        <!-- Gestion des prêts -->
+        <a href="/prets" class="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div class="card-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="card-title justify-center text-lg md:text-xl">Gestion des prêts</h3>
+                <p class="text-sm md:text-base">Suivre et gérer les emprunts</p>
+            </div>
+        </a>
+
+        <!-- Statistiques -->
+        <a href="/prets/stats" class="card bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div class="card-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <h3 class="card-title justify-center text-lg md:text-xl">Statistiques</h3>
+                <p class="text-sm md:text-base">Consulter les statistiques de la bibliothèque</p>
+            </div>
+        </a>
+
+        <!-- Vérification des emprunts -->
+        <a href="/emprunt/verification" class="card bg-gradient-to-br from-teal-500 to-teal-600 text-white shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div class="card-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="card-title justify-center text-lg md:text-xl">Vérification élèves</h3>
+                <p class="text-sm md:text-base">Tester le système de vérification</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer footer-center bg-base-300 text-base-content p-6 mt-12">
+    <aside>
+        <p>Copyright © 2025 — <span class="font-semibold">MonBiblio</span>. Tous droits réservés.</p>
+    </aside>
+</footer>
+
+</body>
+</html>

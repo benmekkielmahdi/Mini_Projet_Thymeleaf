@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emprunter un Ouvrage</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<!-- Navbar Élève (sans fonctionnalités admin) -->
+<div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+  <div class="flex-1">
+    <a href="/" class="btn btn-ghost normal-case text-xl md:text-2xl font-bold text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      <span class="hidden sm:inline">MonBiblio</span>
+    </a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1 gap-1 lg:gap-2">
+      <li>
+        <a href="/ouvrages/eleve" class="btn btn-ghost btn-sm md:btn-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="hidden lg:inline">Ouvrages</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="container mx-auto py-8 md:py-12 px-4">
+  <!-- Breadcrumb -->
+  <div class="text-sm breadcrumbs mb-6">
+    <ul>
+      <li><a href="/ouvrages/eleve">Catalogue</a></li>
+      <li>Emprunter</li>
+    </ul>
+  </div>
+
+  <div class="flex items-center justify-center gap-3 mb-6">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+    <h1 class="text-2xl md:text-3xl font-bold text-primary">Emprunter un Ouvrage</h1>
+  </div>
+
+  <!-- Informations ouvrage -->
+  <div class="card bg-base-100 shadow-lg mb-6 max-w-2xl mx-auto">
+    <div class="card-body">
+      <h2 class="card-title flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        Informations sur l'ouvrage
+      </h2>
+      <div class="mt-4">
+        <p class="text-lg font-semibold" th:text="${ouvrage.titre}">Titre</p>
+        <div class="flex gap-2 mt-2">
+          <span class="badge badge-info" th:text="${ouvrage.niveau}">Niveau</span>
+          <span th:if="${ouvrage.disponible}" class="badge badge-success">Disponible</span>
+          <span th:if="${!ouvrage.disponible}" class="badge badge-error">Indisponible</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="card bg-base-100 shadow-lg max-w-2xl mx-auto">
+    <div class="card-body">
+      <form th:action="@{/prets/create}" method="post">
+        <input type="hidden" name="ouvrageId" th:value="${ouvrage.id}">
+        
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-semibold">Votre nom</span>
+          </label>
+          <input type="text" name="nom" placeholder="Entrez votre nom" class="input input-bordered w-full" required />
+        </div>
+
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-semibold">Votre matricule</span>
+          </label>
+          <input type="text" name="matricule" placeholder="Entrez votre matricule" class="input input-bordered w-full" required />
+        </div>
+
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-semibold">Votre classe</span>
+          </label>
+          <input type="text" name="classe" placeholder="Ex: 1ère A, 3ème B, etc." class="input input-bordered w-full" required />
+        </div>
+
+        <div class="alert alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div>
+            <h3 class="font-bold">Durée du prêt</h3>
+            <div class="text-xs">La durée du prêt est de 2 semaines. La date de retour sera calculée automatiquement.</div>
+          </div>
+        </div>
+
+        <div class="card-actions justify-end mt-6">
+          <a href="/ouvrages/eleve" class="btn btn-outline">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Annuler
+          </a>
+          <button type="submit" class="btn btn-primary" th:disabled="${!ouvrage.disponible}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Confirmer l'emprunt
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="footer footer-center bg-base-300 text-base-content p-6">
+  <aside>
+    <p>Copyright © 2025 — <span class="font-semibold">MonBiblio</span>. Tous droits réservés.</p>
+  </aside>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>MonBiblio</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-100">
+
+<!-- Navbar -->
+<div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl md:text-2xl font-bold text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="hidden sm:inline">MonBiblio</span>
+        </a>
+    </div>
+    <div class="flex-none">
+      <ul class="menu menu-horizontal px-1 gap-1 lg:gap-2">
+        <li>
+          <a href="/emprunt/verification" class="btn btn-ghost btn-sm md:btn-md btn-active">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span class="hidden lg:inline">Emprunter</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<section class="hero min-h-[70vh] bg-base-200">
+    <div class="hero-content flex-col lg:flex-row-reverse gap-10">
+        <img
+                src="https://www.brandeis.edu/library/images/borrow.jpg"
+                class="max-w-sm rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
+                alt="Bibliothèque image"
+        />
+        <div class="max-w-xl">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary leading-tight">
+                Bienvenue à <span class="text-secondary">MonBiblio</span>
+            </h1>
+            <p class="py-4 md:py-6 text-base md:text-lg text-gray-600">
+                Découvrez, empruntez et explorez une large collection d'ouvrages adaptés à tous les niveaux.
+                La lecture est la clé du savoir — commencez votre aventure dès aujourd'hui !
+            </p>
+            
+            
+            <a href="/emprunt/verification" class="btn btn-primary btn-lg shadow-md hover:scale-105 transition-transform w-full sm:w-auto">
+                Emprunter des ouvrages
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Nos Ouvrages -->
+<section class="container mx-40 py-12 my-10">
+
+    <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-6 md:mb-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        Nos Ouvrages
+    </h2>
+
+    <div class="carousel w-full max-w-6xl mx-auto rounded-2xl overflow-hidden shadow-lg">
+        <!-- Slide 1 -->
+        <div id="slide1" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/1.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 1" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide10" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide2" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div id="slide2" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/2.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 2" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide1" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide3" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div id="slide3" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/3.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 3" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide2" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide4" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div id="slide4" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/4.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 4" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide3" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide5" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div id="slide5" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/5.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 5" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide4" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide6" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div id="slide6" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/6.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 6" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide5" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide7" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div id="slide7" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/7.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 7" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide6" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide8" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div id="slide8" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/8.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 8" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide7" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide9" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 9 -->
+        <div id="slide9" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/9.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 9" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide8" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide10" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+
+        <!-- Slide 10 -->
+        <div id="slide10" class="carousel-item relative w-full flex justify-center">
+            <img th:src="@{/images/10.png}" class="w-140 h-180 object-cover rounded-3xl shadow-2xl hover:scale-105 transition-transform" alt="Ouvrage 10" />
+            <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href="#slide9" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❮</a>
+                <a href="#slide1" class="btn btn-circle bg-white text-primary hover:bg-primary hover:text-white">❯</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicateurs de pagination -->
+    <div class="flex justify-center w-full py-2 gap-2">
+        <a href="#slide1" class="btn btn-xs">1</a>
+        <a href="#slide2" class="btn btn-xs">2</a>
+        <a href="#slide3" class="btn btn-xs">3</a>
+        <a href="#slide4" class="btn btn-xs">4</a>
+        <a href="#slide5" class="btn btn-xs">5</a>
+        <a href="#slide6" class="btn btn-xs">6</a>
+        <a href="#slide7" class="btn btn-xs">7</a>
+        <a href="#slide8" class="btn btn-xs">8</a>
+        <a href="#slide9" class="btn btn-xs">9</a>
+        <a href="#slide10" class="btn btn-xs">10</a>
+    </div>
+</section>
+
+<!-- Sections d'accès rapide pour élèves -->
+<section class="bg-base-100 py-8 md:py-12 px-4">
+    <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-6 md:mb-8">Empruntez vos ouvrages</h2>
+
+    <div class="grid grid-cols-1 gap-4 md:gap-6 max-w-2xl mx-auto">
+        <!-- Vérification et Emprunt -->
+        <a href="/emprunt/verification" class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div class="card-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="card-title justify-center text-lg md:text-xl">Emprunter des ouvrages</h3>
+                <p class="text-sm md:text-base">Vérifiez votre inscription et empruntez vos livres favoris</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- Pourquoi choisir MonBiblio -->
+<section class="bg-base-200 py-12">
+    <h2 class="text-3xl font-bold text-center text-primary mb-8">Pourquoi choisir MonBiblio ?</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <!-- Lecture facile -->
+        <div class="card bg-base-100 shadow-lg p-6 rounded-2xl flex flex-col items-center text-center hover:scale-105 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- Livre ouvert -->
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-6-6h12" />
+            </svg>
+            <h3 class="font-bold text-xl mb-2">Lecture facile</h3>
+            <p class="text-gray-600">Interface simple et rapide pour consulter tous les ouvrages.</p>
+        </div>
+
+        <!-- Disponibilité garantie -->
+        <div class="card bg-base-100 shadow-lg p-6 rounded-2xl flex flex-col items-center text-center hover:scale-105 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- Check / validation -->
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <h3 class="font-bold text-xl mb-2">Disponibilité garantie</h3>
+            <p class="text-gray-600">Consultez la disponibilité et empruntez facilement vos ouvrages favoris.</p>
+        </div>
+
+        <!-- Catalogue complet -->
+        <div class="card bg-base-100 shadow-lg p-6 rounded-2xl flex flex-col items-center text-center hover:scale-105 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- Bibliothèque / étagères -->
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16V5H4v14zm4-8h8v2H8v-2z" />
+            </svg>
+            <h3 class="font-bold text-xl mb-2">Catalogue complet</h3>
+            <p class="text-gray-600">Accédez à tous les niveaux scolaires et tous les genres d'ouvrages.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="footer footer-center bg-base-300 text-base-content p-6 mt-12">
+    <aside>
+        <p>Copyright © 2025 — <span class="font-semibold">MonBiblio</span>. Tous droits réservés.</p>
+    </aside>
+</footer>
+
+</body>
+</html>

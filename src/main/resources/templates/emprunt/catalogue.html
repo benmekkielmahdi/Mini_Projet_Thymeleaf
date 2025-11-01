@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue - MonBiblio</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<!-- Navbar -->
+<div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl md:text-2xl font-bold text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span class="hidden sm:inline">MonBiblio</span>
+        </a>
+    </div>
+    <div class="flex-none">
+        <ul class="menu menu-horizontal px-1 gap-1 lg:gap-2">
+            <li>
+                <a th:href="@{'/emprunt/mes-emprunts/' + ${eleve.id}}" class="btn btn-ghost btn-sm md:btn-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span class="hidden lg:inline">Mes Emprunts</span>
+                </a>
+            </li>
+            <li>
+                <a href="/" class="btn btn-ghost btn-sm">Retour</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Alertes Flash -->
+<div th:replace="fragments/alerts :: flashMessages"></div>
+
+<div class="container mx-auto py-8 md:py-12 px-4">
+    <!-- Breadcrumb -->
+    <div class="text-sm breadcrumbs mb-6">
+        <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/emprunt/verification">Vérification</a></li>
+            <li>Catalogue</li>
+        </ul>
+    </div>
+
+    <!-- En-tête avec informations élève -->
+    <div class="bg-base-100 p-4 md:p-6 rounded-lg shadow-md mb-6">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-primary" th:text="'Bienvenue, ' + ${eleve.nom}">Bienvenue</h1>
+                    <p class="text-sm text-gray-600" th:text="'Matricule: ' + ${eleve.matricule} + ' | Classe: ' + ${eleve.classe}">Informations</p>
+                </div>
+            </div>
+            <div class="badge badge-success text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Élève vérifié
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="bg-base-100 p-4 rounded-lg shadow-md mb-6">
+        <form method="get" class="flex flex-wrap gap-4 items-end">
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Niveau</span>
+                </label>
+                <select name="niveau" class="select select-bordered">
+                    <option value="">Tous les niveaux</option>
+                    <option value="Primaire" th:selected="${niveau == 'Primaire'}">Primaire</option>
+                    <option value="Collège" th:selected="${niveau == 'Collège'}">Collège</option>
+                    <option value="Lycée" th:selected="${niveau == 'Lycée'}">Lycée</option>
+                </select>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Disponibilité</span>
+                </label>
+                <select name="disponible" class="select select-bordered">
+                    <option value="">Tous</option>
+                    <option value="true" th:selected="${disponible == true}">Disponibles</option>
+                    <option value="false" th:selected="${disponible == false}">Indisponibles</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+            <a th:href="@{'/emprunt/catalogue/' + ${eleve.id}}" class="btn btn-outline">Réinitialiser</a>
+        </form>
+    </div>
+
+    <!-- Liste des ouvrages -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        <div th:each="ouvrage : ${ouvrages}" class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+            <figure class="h-32 rounded-t-lg bg-gray-100">
+                <img th:src="@{'/images/' + ${ouvrage.imageFileName}}" 
+                     th:alt="${ouvrage.titre}"
+                     class="w-full h-full object-contain p-2" />
+            </figure>
+            <div class="card-body p-4">
+                <h2 class="card-title text-sm md:text-base" th:text="${ouvrage.titre}">Titre</h2>
+                <div class="flex flex-wrap gap-1 mb-2">
+                    <span class="badge badge-outline text-xs" th:text="${ouvrage.niveau}">Niveau</span>
+                    <span class="badge badge-neutral text-xs" th:text="'Qté: ' + ${ouvrage.quantite}">Quantité</span>
+                </div>
+                
+                <!-- Statut de disponibilité -->
+                <div class="mb-3">
+                    <span th:if="${ouvrage.disponible && ouvrage.quantite > 0}" 
+                          class="badge badge-success text-xs">Disponible</span>
+                    <span th:if="${!ouvrage.disponible || ouvrage.quantite <= 0}" 
+                          class="badge badge-error text-xs">Indisponible</span>
+                </div>
+
+                <!-- Bouton d'emprunt -->
+                <div class="card-actions justify-end">
+                    <th:block th:with="dejaEmprunte=${ouvrageIdsEmpruntes.contains(ouvrage.id)}">
+                        <a th:href="@{'/emprunt/emprunter/' + ${eleve.id} + '/' + ${ouvrage.id}}" 
+                           class="btn btn-xs md:btn-sm btn-primary" 
+                           th:if="${ouvrage.disponible && ouvrage.quantite > 0 && !dejaEmprunte}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="hidden sm:inline">Emprunter</span>
+                        </a>
+                        <span th:if="${dejaEmprunte}" class="badge badge-warning text-xs">Déjà emprunté</span>
+                        <span th:if="${!ouvrage.disponible || ouvrage.quantite <= 0}" 
+                              class="text-gray-500 text-xs badge badge-ghost">Indisponible</span>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message si aucun ouvrage -->
+    <div th:if="${#lists.isEmpty(ouvrages)}" class="text-center py-12">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-600 mb-2">Aucun ouvrage trouvé</h3>
+        <p class="text-gray-500">Aucun ouvrage ne correspond à vos critères de recherche.</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer footer-center bg-base-300 text-base-content p-6 mt-12">
+    <aside>
+        <p>Copyright © 2025 — <span class="font-semibold">MonBiblio</span>. Tous droits réservés.</p>
+    </aside>
+</footer>
+
+</body>
+</html>

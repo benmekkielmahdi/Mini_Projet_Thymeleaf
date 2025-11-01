@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des Prêts</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<div th:replace="fragments/layout :: navbar"></div>
+
+<!-- Alertes Flash -->
+<div th:replace="fragments/alerts :: flashMessages"></div>
+
+<!-- En-tête -->
+<header class="text-center py-6 md:py-10 px-4">
+  <div class="flex items-center justify-center gap-3 mb-3">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    <h1 class="text-3xl md:text-4xl font-bold text-primary">Gestion des Prêts</h1>
+  </div>
+  <p class="text-gray-500 mt-2 text-sm md:text-base">Gérez tous les prêts de la bibliothèque</p>
+</header>
+
+<!-- Formulaire de prêt -->
+<div class="container mx-auto px-4 md:px-6 pb-4">
+  <div class="card bg-base-100 shadow-lg mb-6">
+    <div class="card-body">
+      <h2 class="card-title text-lg md:text-xl flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Créer un nouveau prêt
+      </h2>
+      <form th:action="@{/prets/create}" method="post" class="flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-end">
+        <div class="flex-1">
+          <label class="block text-gray-700 font-medium mb-1 text-sm md:text-base">Élève</label>
+          <select name="eleveId" class="select select-bordered w-full" required>
+            <option value="">Choisir un élève</option>
+            <option th:each="eleve : ${eleves}" 
+                    th:value="${eleve.id}" 
+                    th:text="${eleve.nom + ' - ' + eleve.classe}">Élève</option>
+          </select>
+        </div>
+        <div class="flex-1">
+          <label class="block text-gray-700 font-medium mb-1 text-sm md:text-base">Ouvrage</label>
+          <select name="ouvrageId" class="select select-bordered w-full" required>
+            <option value="">Choisir un ouvrage disponible</option>
+            <option th:each="ouvrage : ${ouvrages}" 
+                    th:value="${ouvrage.id}" 
+                    th:text="${ouvrage.titre + ' (' + ouvrage.niveau + ')'}">Ouvrage</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-full md:w-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Créer
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Filtrage -->
+<div class="container mx-auto px-4 md:px-6 pb-4">
+  <div class="flex flex-col lg:flex-row gap-4 items-stretch lg:items-end justify-between">
+    <form th:action="@{/prets}" method="get" class="flex-1 flex flex-col sm:flex-row gap-3">
+      <div class="flex-1">
+        <label class="block text-gray-700 font-medium mb-1 text-sm md:text-base">Niveau</label>
+        <select name="niveau" class="select select-bordered w-full">
+          <option value="">Tous les niveaux</option>
+          <option value="Primaire" th:selected="${niveau == 'Primaire'}">Primaire</option>
+          <option value="Collège" th:selected="${niveau == 'Collège'}">Collège</option>
+          <option value="Lycée" th:selected="${niveau == 'Lycée'}">Lycée</option>
+        </select>
+      </div>
+      <div class="flex-1">
+        <label class="block text-gray-700 font-medium mb-1 text-sm md:text-base">Code Barres</label>
+        <input type="text" name="codeBarres" th:value="${codeBarres}" placeholder="Ex: CODE-123" class="input input-bordered w-full" />
+      </div>
+      <div class="self-end">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Filtrer
+        </button>
+      </div>
+    </form>
+    <a href="/prets/stats" class="btn btn-secondary w-full lg:w-auto">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+      Statistiques
+    </a>
+  </div>
+</div>
+
+<!-- Liste des prêts -->
+<main class="container mx-auto px-4 md:px-6 pb-16">
+  <div class="overflow-x-auto -mx-2 md:mx-0">
+    <table class="table w-full bg-base-100 shadow-lg rounded-lg text-xs md:text-sm">
+      <thead>
+        <tr class="hidden lg:table-row">
+          <th class="hidden lg:table-cell">Élève</th>
+          <th>Ouvrage</th>
+          <th>Niveau</th>
+          <th class="hidden xl:table-cell">Code Barres</th>
+          <th class="hidden xl:table-cell">Date Prêt</th>
+          <th>Date Retour Prévue</th>
+          <th class="hidden xl:table-cell">Date Retour</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="pret : ${prets}" class="hover">
+          <td class="hidden lg:table-cell">
+            <div class="font-bold text-sm" th:text="${pret.eleve.nom}">Nom</div>
+            <div class="text-xs text-gray-500" th:text="${pret.eleve.classe}">Classe</div>
+          </td>
+          <td class="font-semibold" th:text="${pret.ouvrage.titre}">Ouvrage</td>
+          <td>
+            <span class="badge badge-info text-xs" th:text="${pret.ouvrage.niveau}">Niveau</span>
+          </td>
+          <td class="hidden xl:table-cell text-xs" th:text="${pret.ouvrage.codeBarres}">Code</td>
+          <td class="hidden xl:table-cell text-xs" th:text="${#temporals.format(pret.id.datePret, 'dd/MM/yyyy')}">Date</td>
+          <td class="text-xs md:text-sm" th:text="${#temporals.format(pret.dateRetourPrevu, 'dd/MM/yyyy')}">Date</td>
+          <td class="hidden xl:table-cell">
+            <span th:if="${pret.dateRetour != null}" class="text-xs"
+                  th:text="${#temporals.format(pret.dateRetour, 'dd/MM/yyyy')}">Date</span>
+            <span th:if="${pret.dateRetour == null}" class="text-xs text-gray-400">Non retourné</span>
+          </td>
+          <td>
+            <span th:if="${pret.dateRetour == null}" 
+                  th:classappend="${pret.isLate()} ? 'badge-error' : 'badge-success'"
+                  class="badge text-xs"
+                  th:text="${pret.isLate()} ? 'En retard' : 'Actif'">Statut</span>
+            <span th:if="${pret.dateRetour != null}" class="badge badge-ghost text-xs">Retourné</span>
+          </td>
+          <td>
+            <a th:if="${pret.dateRetour == null}"
+               th:href="@{'/prets/return/' + ${pret.eleve.id} + '/' + ${pret.ouvrage.id} + '?datePret=' + ${pret.id.datePret}}"
+               onclick="return confirm('Marquer ce prêt comme retourné ?')"
+               class="btn btn-xs md:btn-sm btn-success">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="hidden sm:inline">Retourner</span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<div th:replace="fragments/layout :: footer"></div>
+
+</body>
+</html>
+

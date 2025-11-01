@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${eleve.id != null} ? 'Modifier Élève' : 'Ajouter Élève'">Ajouter Élève</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<div th:replace="fragments/layout :: navbar"></div>
+
+<!-- Alertes Flash -->
+<div th:replace="fragments/alerts :: flashMessages"></div>
+
+<div class="container mx-auto py-8 md:py-12 px-4">
+  <!-- Breadcrumb -->
+  <div class="text-sm breadcrumbs mb-6">
+    <ul>
+      <li><a href="/eleves">Liste des élèves</a></li>
+      <li th:text="${eleve.id != null} ? 'Modifier' : 'Ajouter'"></li>
+    </ul>
+  </div>
+
+  <div class="flex items-center justify-center gap-3 mb-6">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
+    <h1 class="text-2xl md:text-3xl font-bold text-primary" th:text="${eleve.id != null} ? 'Modifier Élève' : 'Ajouter un Élève'">Ajouter un Élève</h1>
+  </div>
+
+  <form th:action="@{/eleves/save}" th:object="${eleve}" method="post" class="bg-base-100 p-4 md:p-6 rounded-lg shadow-md max-w-lg mx-auto">
+    <!-- ID caché pour l'édition -->
+    <input type="hidden" th:field="*{id}" />
+    
+    <!-- Matricule -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Matricule :</label>
+      <input type="text" th:field="*{matricule}" placeholder="Matricule" required
+             th:class="${#fields.hasErrors('matricule')} ? 'input input-bordered w-full input-error' : 'input input-bordered w-full'" />
+      <div th:if="${#fields.hasErrors('matricule')}" class="text-error text-sm mt-1">
+        <span th:each="error : ${#fields.errors('matricule')}" th:text="${error}">Erreur</span>
+      </div>
+    </div>
+
+    <!-- Nom -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Nom complet :</label>
+      <input type="text" th:field="*{nom}" placeholder="Nom complet" required
+             th:class="${#fields.hasErrors('nom')} ? 'input input-bordered w-full input-error' : 'input input-bordered w-full'" />
+      <div th:if="${#fields.hasErrors('nom')}" class="text-error text-sm mt-1">
+        <span th:each="error : ${#fields.errors('nom')}" th:text="${error}">Erreur</span>
+      </div>
+    </div>
+
+    <!-- Classe -->
+    <div class="mb-6">
+      <label class="block text-gray-700 font-bold mb-2 text-sm md:text-base">Classe :</label>
+      <input type="text" th:field="*{classe}" placeholder="Ex: 1ère AS, 2ème AS" required
+             th:class="${#fields.hasErrors('classe')} ? 'input input-bordered w-full input-error' : 'input input-bordered w-full'" />
+      <div th:if="${#fields.hasErrors('classe')}" class="text-error text-sm mt-1">
+        <span th:each="error : ${#fields.errors('classe')}" th:text="${error}">Erreur</span>
+      </div>
+    </div>
+
+    <!-- Boutons -->
+    <div class="flex flex-col sm:flex-row gap-3">
+      <a href="/eleves" class="btn btn-outline w-full sm:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Annuler
+      </a>
+      <button type="submit" class="btn btn-primary w-full sm:w-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span th:text="${eleve.id != null} ? 'Modifier' : 'Ajouter'">Ajouter</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<div th:replace="fragments/layout :: footer"></div>
+
+</body>
+</html>

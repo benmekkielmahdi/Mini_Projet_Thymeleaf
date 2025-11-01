@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Élève - MonBiblio</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<!-- Navbar -->
+<div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl md:text-2xl font-bold text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span class="hidden sm:inline">MonBiblio</span>
+        </a>
+    </div>
+    <div class="flex-none">
+        <a href="/" class="btn btn-ghost btn-sm">Retour à l'accueil</a>
+    </div>
+</div>
+
+<!-- Alertes Flash -->
+<div th:replace="fragments/alerts :: flashMessages"></div>
+
+<div class="container mx-auto py-8 md:py-12 px-4">
+    <!-- Breadcrumb -->
+    <div class="text-sm breadcrumbs mb-6">
+        <ul>
+            <li><a href="/">Accueil</a></li>
+            <li>Vérification Élève</li>
+        </ul>
+    </div>
+
+    <div class="flex items-center justify-center gap-3 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h1 class="text-2xl md:text-3xl font-bold text-primary">Vérification Élève</h1>
+    </div>
+
+    <!-- Information importante -->
+    <div class="alert alert-info mb-8 max-w-2xl mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+            <h3 class="font-bold">Accès aux emprunts</h3>
+            <div class="text-sm">Seuls les élèves enregistrés dans notre système peuvent emprunter des ouvrages. 
+                Veuillez saisir votre matricule et votre nom complet pour vérifier votre inscription.</div>
+        </div>
+    </div>
+
+    <!-- Formulaire de vérification -->
+    <div class="bg-base-100 p-6 md:p-8 rounded-lg shadow-md max-w-md mx-auto">
+        <form th:action="@{/emprunt/verifier}" method="post">
+            <!-- Matricule -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2">Matricule :</label>
+                <input type="text" name="matricule" placeholder="Votre matricule" required
+                       class="input input-bordered w-full" />
+                <p class="text-xs text-gray-500 mt-1">Ex: 2024001, ELEVE001, etc.</p>
+            </div>
+
+            <!-- Nom complet -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-bold mb-2">Nom complet :</label>
+                <input type="text" name="nom" placeholder="Votre nom complet" required
+                       class="input input-bordered w-full" />
+                <p class="text-xs text-gray-500 mt-1">Ex: Ahmed Benali, Fatima Zahra, etc.</p>
+            </div>
+
+            <!-- Bouton de vérification -->
+            <button type="submit" class="btn btn-primary w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Vérifier mon inscription
+            </button>
+        </form>
+    </div>
+
+    <!-- Information pour les non-inscrits -->
+    <div class="mt-8 max-w-2xl mx-auto">
+        <div class="alert alert-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <div>
+                <h3 class="font-bold">Vous n'êtes pas encore inscrit ?</h3>
+                <div class="text-sm">
+                    Si vous ne trouvez pas votre compte, veuillez contacter l'administration pour vous inscrire.
+                    <br><strong>Contact :</strong> Administration de la bibliothèque scolaire
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer footer-center bg-base-300 text-base-content p-6 mt-12">
+    <aside>
+        <p>Copyright © 2025 — <span class="font-semibold">MonBiblio</span>. Tous droits réservés.</p>
+    </aside>
+</footer>
+
+</body>
+</html>
