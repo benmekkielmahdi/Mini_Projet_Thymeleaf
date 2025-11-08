@@ -6,6 +6,13 @@
 
 https://github.com/user-attachments/assets/613a0e5d-b4b8-4501-b0c6-62eac2dee30c
 
+## 🎬 Demo sur YouTube
+
+Découvrez la démo du projet en haute qualité sur YouTube 👇  
+
+[![Regarder la démo en HD](https://img.youtube.com/vi/EBNgXmqv0vU/maxresdefault.jpg)](https://www.youtube.com/watch?v=EBNgXmqv0vU)
+
+ ##  Captures d’écran
 <img width="1435" height="814" alt="Screenshot 2025-11-01 at 23 46 02" src="https://github.com/user-attachments/assets/b421fe43-8e91-4b4e-8bcc-78c27862d9d4" />
 <img width="1440" height="900" alt="Screenshot 2025-11-01 at 23 46 19" src="https://github.com/user-attachments/assets/0a87c98f-1b1c-401d-b8b5-266c200c24b6" />
 <img width="1440" height="900" alt="Screenshot 2025-11-01 at 23 46 32" src="https://github.com/user-attachments/assets/602e09e1-f9a3-4bcd-ae8e-781247ea0e79" />
